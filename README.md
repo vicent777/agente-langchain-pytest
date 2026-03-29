@@ -22,7 +22,7 @@ Antes de começar, você precisará de uma conta no **Azure** com o serviço **A
 
 1. **Clone o repositório:**
    ```bash
-   git clone [https://github.com/seu-usuario/nome-do-repositorio.git](https://github.com/seu-usuario/nome-do-repositorio.git)
+   git clone https://github.com/vicent777/agente-langchain-pytest.git
    cd nome-do-repositorio
 
 2. **Crie um ambiente virtual:**
@@ -44,13 +44,13 @@ Antes de começar, você precisará de uma conta no **Azure** com o serviço **A
     AZURE_OPENAI_API_VERSION="2023-05-15"
 
 ## 💻 Como Executar
-1. Coloque o código Python que deseja testar em um arquivo (ex: funcoes.py).
-2. Execute o agente:
+1. **Coloque o código Python que deseja testar em um arquivo (ex: funcoes.py).**
+2. **Execute o agente:**
     ```Bash
     python main.py
 
-3. O agente criará o arquivo test_funcoes.py.
+3. **O agente criará o arquivo test_funcoes.py.**
 
-4. Para validar os testes gerados, execute:
+4. **Para validar os testes gerados, execute:**
     ```Bash
     pytest

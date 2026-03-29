@@ -10,3 +10,6 @@ pytest>=8.0.0
 
 # Opcional: Gerenciamento de arquivos e caminhos
 pathlib>=1.0.1
+
+# OpenAI API Client
+openai>=0.28.1
