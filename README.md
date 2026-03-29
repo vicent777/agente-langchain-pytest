@@ -26,15 +26,17 @@ Antes de começar, você precisará de uma conta no **Azure** com o serviço **A
    cd nome-do-repositorio
 
 2. **Crie um ambiente virtual:**
-    ```python -m venv venv
+     ```bash
+    python -m venv venv
     source venv/bin/activate  # No Windows: venv\Scripts\activate
 
 3. **Instale as dependências:**
-
-    ```pip install -r requirements.txt
+     ```bash
+    pip install -r requirements.txt
 
 4. **Configure as Variáveis de Ambiente:**
-    ```Crie um arquivo .env na raiz do projeto:
+     ```bash
+    Crie um arquivo .env na raiz do projeto:
 
     AZURE_OPENAI_API_KEY="sua_chave_aqui"
     AZURE_OPENAI_ENDPOINT="[https://seu-recurso.openai.azure.com/](https://seu-recurso.openai.azure.com/)"
