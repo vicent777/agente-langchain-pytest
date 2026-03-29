@@ -42,3 +42,15 @@ Antes de começar, você precisará de uma conta no **Azure** com o serviço **A
     AZURE_OPENAI_ENDPOINT="[https://seu-recurso.openai.azure.com/](https://seu-recurso.openai.azure.com/)"
     AZURE_OPENAI_DEPLOYMENT_NAME="nome-do-seu-deployment"
     AZURE_OPENAI_API_VERSION="2023-05-15"
+
+## 💻 Como Executar
+1. Coloque o código Python que deseja testar em um arquivo (ex: funcoes.py).
+2. Execute o agente:
+    ```Bash
+    python main.py
+
+3. O agente criará o arquivo test_funcoes.py.
+
+4. Para validar os testes gerados, execute:
+    ```Bash
+    pytest
