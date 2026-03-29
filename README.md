@@ -39,7 +39,7 @@ Antes de começar, você precisará de uma conta no **Azure** com o serviço **A
     Crie um arquivo .env na raiz do projeto:
 
     AZURE_OPENAI_API_KEY="sua_chave_aqui"
-    AZURE_OPENAI_ENDPOINT="[https://seu-recurso.openai.azure.com/](https://seu-recurso.openai.azure.com/)"
+    AZURE_OPENAI_ENDPOINT="https://seu-recurso.openai.azure.com"
     AZURE_OPENAI_DEPLOYMENT_NAME="nome-do-seu-deployment"
     AZURE_OPENAI_API_VERSION="2023-05-15"
 
@@ -49,7 +49,7 @@ Antes de começar, você precisará de uma conta no **Azure** com o serviço **A
     ```Bash
     python main.py
 
-3. **O agente criará o arquivo test_funcoes.py.**
+3. **O agente criará o arquivo test_funcao.py.**
 
 4. **Para validar os testes gerados, execute:**
     ```Bash
