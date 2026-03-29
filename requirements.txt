@@ -1,0 +1,12 @@
+# Orquestração de LLM
+langchain>=0.1.0
+langchain-openai>=0.0.8
+
+# Utilitários e Ambiente
+python-dotenv>=1.0.0
+
+# Framework de Testes
+pytest>=8.0.0
+
+# Opcional: Gerenciamento de arquivos e caminhos
+pathlib>=1.0.1
