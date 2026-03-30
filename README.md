@@ -44,15 +44,16 @@ Gera automaticamente testes unitários para o código enviado e executa os teste
 1. **Inicie o servidor:**
     ```Bash
     uvicorn app:app --reload
-
+    
 2. **Acesse a documentação automática.**
     ```Bash
     http://localhost:8000/docs
-
+    
 3. **Usar o endpoint**
     ```Bash
     POST /generate-tests
-
+    ```
+    
 ### 📥 Exemplo de requisição
     ```Bash
     {
@@ -61,7 +62,7 @@ Gera automaticamente testes unitários para o código enviado e executa os teste
     }
     ```
 
-## Exemplo de resposta
+### Exemplo de resposta
     ```Bash
     {
     "status": "success",
