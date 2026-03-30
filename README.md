@@ -2,13 +2,17 @@
 
 # 🤖 Agente Gerador de Testes Unitários com IA
 
-Este projeto implementa um agente de Inteligência Artificial exposto via API REST, capaz de analisar códigos Python e gerar automaticamente testes unitários utilizando a biblioteca `pytest`. A solução utiliza **LangChain** para orquestração e **Azure OpenAI** como motor de inferência exposta através de uma API construída com FastAPI.
+Este projeto implementa um agente de Inteligência Artificial exposto via API REST, capaz de analisar códigos Python e gerar automaticamente testes unitários utilizando a biblioteca `pytest`.
+
+A solução utiliza **FastAPI** para exposição da API e um modelo LLM (Azure OpenAI ou equivalente) para geração automática de testes, executando-os dinamicamente em ambiente isolado.
 
 ## 🚀 Funcionalidades
-- **Análise Automática:** O agente lê arquivos `.py` existentes.
-- **Geração de Casos de Teste:** Cria testes para fluxos de sucesso e tratamento de exceções (falhas).
-- **API REST:** Para integração com outros sistemas
-- **SAÍDAS:** Retorno de testes prontos para uso
+- **Análise automática de código Python**
+- **Geração de testes unitários com IA**
+- **Cobertura de cenários de sucesso e exceções**
+- **Execução automática dos testes com pytest**
+- **Retorno estruturado com resultado da execução**
+- **Ambiente isolado para execução segura (temporary sandbox)**
 
 ## 🛠️ Tecnologias Utilizadas
 - **Linguagem:** Python 3.10+
@@ -24,6 +28,34 @@ Este projeto implementa um agente de Inteligência Artificial exposto via API RE
 
 ## 📋 Pré-requisitos
 Antes de começar, você precisará de uma conta no **Azure** com o serviço **Azure OpenAI** habilitado e um modelo implantado (deployment).
+
+---
+
+## 📡 Endpoint Principal
+
+### `POST /generate-test`
+
+Gera automaticamente testes unitários para o código enviado e executa os testes.
+
+---
+
+### 📥 Exemplo de requisição
+```Bash
+{
+  "source_code": "def somar(a, b):\n    return a + b\n\ndef dividir(a, b):\n    if b == 0:\n        raise ValueError('Não é possível dividir por zero.')\n    return a / b",
+  "language": "python"
+}
+
+
+- Exemplo de resposta
+```Bash
+{
+  "status": "success",
+  "test_code": "import pytest ...",
+  "pytest_output": "... 3 passed in 0.02s",
+  "pytest_error": "",
+  "return_code": 0
+}
 
 ## 🔧 Configuração do Ambiente
 
