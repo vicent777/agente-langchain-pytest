@@ -39,50 +39,8 @@ Gera automaticamente testes unitários para o código enviado e executa os teste
 
 ---
 
-### 📥 Exemplo de requisição
-```Bash
-{
-  "source_code": "def somar(a, b):\n    return a + b\n\ndef dividir(a, b):\n    if b == 0:\n        raise ValueError('Não é possível dividir por zero.')\n    return a / b",
-  "language": "python"
-}
-
-
-- Exemplo de resposta
-```Bash
-{
-  "status": "success",
-  "test_code": "import pytest ...",
-  "pytest_output": "... 3 passed in 0.02s",
-  "pytest_error": "",
-  "return_code": 0
-}
-
-## 🔧 Configuração do Ambiente
-
-1. **Clone o repositório:**
-   ```bash
-   git clone https://github.com/vicent777/agente-langchain-pytest.git
-   cd agente-langchain-pytest
-
-2. **Crie um ambiente virtual:**
-     ```bash
-    python -m venv venv
-    source venv/bin/activate  # No Windows: venv\Scripts\activate
-
-3. **Instale as dependências:**
-     ```bash
-    pip install -r requirements.txt
-
-4. **Configure as Variáveis de Ambiente:**
-     ```bash
-    Crie um arquivo .env na raiz do projeto:
-
-    AZURE_OPENAI_API_KEY="sua_chave_aqui"
-    AZURE_OPENAI_ENDPOINT="https://seu-recurso.openai.azure.com"
-    AZURE_OPENAI_DEPLOYMENT_NAME="nome-do-seu-deployment"
-    AZURE_OPENAI_API_VERSION="2023-05-15"
-
 ## 💻 Como Executar a API
+
 1. **Inicie o servidor:**
     ```Bash
     uvicorn app:app --reload
@@ -95,12 +53,48 @@ Gera automaticamente testes unitários para o código enviado e executa os teste
     ```Bash
     POST /generate-tests
 
-- Exemplo:
+### 📥 Exemplo de requisição
     ```Bash
     {
-     "code": "def calcular_bonus(salario): return salario * 0.1"
+    "source_code": "def somar(a, b):\n    return a + b\n\ndef dividir(a, b):\n    if b == 0:\n        raise ValueError('Não é possível dividir por zero.')\n    return a / b",
+    "language": "python"
     }
-    
-- Resposta esperada:
     ```
-4. ****
+
+## Exemplo de resposta
+    ```Bash
+    {
+    "status": "success",
+    "test_code": "import pytest ...",
+    "pytest_output": "... 3 passed in 0.02s",
+    "pytest_error": "",
+    "return_code": 0
+    }
+    ```
+
+## 🔧 Configuração do Ambiente
+
+1. **Clone o repositório:**
+   ```bash
+   git clone https://github.com/vicent777/agente-langchain-pytest.git
+   cd agente-langchain-pytest
+
+2. **Crie um ambiente virtual:**
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # No Windows: venv\Scripts\activate
+
+3. **Instale as dependências:**
+    ```bash
+    pip install -r requirements.txt
+
+4. **Configure as Variáveis de Ambiente:**
+    ```bash
+    Crie um arquivo .env na raiz do projeto:
+
+    AZURE_OPENAI_API_KEY="sua_chave_aqui"
+    AZURE_OPENAI_ENDPOINT="https://seu-recurso.openai.azure.com"
+    AZURE_OPENAI_DEPLOYMENT_NAME="nome-do-seu-deployment"
+    AZURE_OPENAI_API_VERSION="2023-05-15"
+
+
