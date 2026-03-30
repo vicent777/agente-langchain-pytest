@@ -1,0 +1,63 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy container app to Azure Web App - agente-qa-vinicius
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read #This is required for actions/checkout
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to container registry
+        uses: docker/login-action@v2
+        with:
+          registry: mcr.microsoft.com/
+          username: ${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_A917E3E465024646A7C1D0FE6D8F8F1E }}
+          password: ${{ secrets.AZUREAPPSERVICE_CONTAINERPASSWORD_3597BD81E06846E1AFEECD5CF941E22A }}
+
+      - name: Build and push container image to registry
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: mcr.microsoft.com/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_A917E3E465024646A7C1D0FE6D8F8F1E }}/appsvc/staticsite:${{ github.sha }}
+          file: ./Dockerfile
+
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write #This is required for requesting the JWT
+      contents: read #This is required for actions/checkout
+
+    needs: build
+    
+    steps:
+      
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_6D0702BF54D749CEB9E07EEB54E82311 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_F36A1DFD6936426DA9DC37871F5C8C1B }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_8B68BAC7823A46368A8D95C52CD399E2 }}
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'agente-qa-vinicius'
+          slot-name: 'Production'
+          images: 'mcr.microsoft.com/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_A917E3E465024646A7C1D0FE6D8F8F1E }}/appsvc/staticsite:${{ github.sha }}'
+          
