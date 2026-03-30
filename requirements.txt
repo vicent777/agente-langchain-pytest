@@ -1,15 +1,14 @@
-# Orquestração de LLM
+# --- Core Frameworks ---
+fastapi==0.110.0
+uvicorn==0.27.1
+pydantic==2.6.3
+
+# --- LangChain & AI ---
 langchain>=0.1.0
 langchain-openai>=0.0.8
 
-# Utilitários e Ambiente
-python-dotenv>=1.0.0
+# --- Utilities & Environment ---
+python-dotenv==1.0.1
 
-# Framework de Testes
-pytest>=8.0.0
-
-# Opcional: Gerenciamento de arquivos e caminhos
-pathlib>=1.0.1
-
-# OpenAI API Client
-openai>=0.28.1
+# --- Testing ---
+pytest==8.0.2
