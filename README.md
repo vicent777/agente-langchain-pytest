@@ -2,18 +2,25 @@
 
 # 🤖 Agente Gerador de Testes Unitários com IA
 
-Este projeto consiste em um agente de Inteligência Artificial capaz de analisar códigos Python e gerar automaticamente arquivos de testes unitários utilizando a biblioteca `pytest`. A solução utiliza **LangChain** para orquestração e **Azure OpenAI** como motor de inferência.
+Este projeto implementa um agente de Inteligência Artificial exposto via API REST, capaz de analisar códigos Python e gerar automaticamente testes unitários utilizando a biblioteca `pytest`. A solução utiliza **LangChain** para orquestração e **Azure OpenAI** como motor de inferência exposta através de uma API construída com FastAPI.
 
 ## 🚀 Funcionalidades
 - **Análise Automática:** O agente lê arquivos `.py` existentes.
 - **Geração de Casos de Teste:** Cria testes para fluxos de sucesso e tratamento de exceções (falhas).
-- **Saída Pronta para Uso:** Gera um arquivo `test_<nome>.py` em formato Python puro.
+- **API REST:** Para integração com outros sistemas
+- **SAÍDAS:** Retorno de testes prontos para uso
 
 ## 🛠️ Tecnologias Utilizadas
 - **Linguagem:** Python 3.10+
+- **API Framework:** FastAPI
 - **LLM:** Azure OpenAI (GPT-4 ou GPT-3.5)
 - **Framework IA:** LangChain
 - **Testes:** Pytest
+- **Servidor ASGI:** Uvicorn
+- **Ambiente:** Docker (opcional para deploy)
+- **Controle de versão:** Git + GitHub
+- **Deploy:** Azure App Service (integração com GitHub / CI-CD)
+- **Infraestrutura:** Azure Container Registry (Docker images)
 
 ## 📋 Pré-requisitos
 Antes de começar, você precisará de uma conta no **Azure** com o serviço **Azure OpenAI** habilitado e um modelo implantado (deployment).
@@ -23,7 +30,7 @@ Antes de começar, você precisará de uma conta no **Azure** com o serviço **A
 1. **Clone o repositório:**
    ```bash
    git clone https://github.com/vicent777/agente-langchain-pytest.git
-   cd nome-do-repositorio
+   cd agente-langchain-pytest
 
 2. **Crie um ambiente virtual:**
      ```bash
@@ -43,14 +50,25 @@ Antes de começar, você precisará de uma conta no **Azure** com o serviço **A
     AZURE_OPENAI_DEPLOYMENT_NAME="nome-do-seu-deployment"
     AZURE_OPENAI_API_VERSION="2023-05-15"
 
-## 💻 Como Executar
-1. **Coloque o código Python que deseja testar em um arquivo (ex: funcoes.py).**
-2. **Execute o agente:**
+## 💻 Como Executar a API
+1. **Inicie o servidor:**
     ```Bash
-    python main.py
+    uvicorn app:app --reload
 
-3. **O agente criará o arquivo test_funcao.py.**
-
-4. **Para validar os testes gerados, execute:**
+2. **Acesse a documentação automática.**
     ```Bash
-    pytest
+    http://localhost:8000/docs
+
+3. **Usar o endpoint**
+    ```Bash
+    POST /generate-tests
+
+- Exemplo:
+    ```Bash
+    {
+     "code": "def calcular_bonus(salario): return salario * 0.1"
+    }
+    
+- Resposta esperada:
+    ```
+4. ****
