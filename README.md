@@ -1,18 +1,24 @@
 # agente-langchain-pytest
 
-# 🤖 Agente Gerador de Testes Unitários com IA
+# 🤖 AI QA Agent: Gerador e Executor de Testes com IA
 
-Este projeto implementa um agente de Inteligência Artificial exposto via API REST, capaz de analisar códigos Python e gerar automaticamente testes unitários utilizando a biblioteca `pytest`.
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-Framework-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![Azure](https://img.shields.io/badge/Azure-App%20Service%20%26%20ACR-0078D4?style=for-the-badge&logo=microsoftazure)](https://azure.microsoft.com/)
+[![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?style=for-the-badge&logo=docker)](https://www.docker.com/)
 
-A solução utiliza **FastAPI** para exposição da API e um modelo LLM (Azure OpenAI ou equivalente) para geração automática de testes, executando-os dinamicamente em ambiente isolado.
+Este projeto implementa um **Agente de IA Autônomo** capaz de analisar códigos Python, gerar testes unitários via LLM (Azure OpenAI) e executá-los dinamicamente utilizando `pytest`. A solução foi projetada para funcionar tanto em ambientes de desenvolvimento local quanto escalonada em containers na nuvem.
+
+> **Upgrade Recente:** O projeto agora conta com arquitetura containerizada e deploy automatizado (CI/CD) para o Azure App Service.
+
+---
 
 ## 🚀 Funcionalidades
-- **Análise automática de código Python**
-- **Geração de testes unitários com IA**
-- **Cobertura de cenários de sucesso e exceções**
-- **Execução automática dos testes com pytest**
-- **Retorno estruturado com resultado da execução**
-- **Ambiente isolado para execução segura (temporary sandbox)**
+- **Análise e Geração Automática:** Cria cenários de teste unitários abrangendo casos de sucesso, falha e exceções.
+- **Execução Dinâmica:** O agente não apenas escreve o código, mas o executa em um ambiente isolado para validar o comportamento.
+- **Relatórios Detalhados:** Retorno estruturado com o `test_code`, o `output` real do pytest e códigos de status de execução.
+- **Arquitetura Containerizada:** Pronto para rodar via Docker em qualquer infraestrutura.
+- **Pipeline CI/CD:** Integração nativa com GitHub Actions para deploy automatizado na Azure.
 
 ## 🛠️ Tecnologias Utilizadas
 - **Linguagem:** Python 3.10+
@@ -21,81 +27,75 @@ A solução utiliza **FastAPI** para exposição da API e um modelo LLM (Azure O
 - **Framework IA:** LangChain
 - **Testes:** Pytest
 - **Servidor ASGI:** Uvicorn
-- **Ambiente:** Docker (opcional para deploy)
 - **Controle de versão:** Git + GitHub
-- **Deploy:** Azure App Service (integração com GitHub / CI-CD)
-- **Infraestrutura:** Azure Container Registry (Docker images)
+- **Deploy:** Azure App Service (integração com GitHub Actions / CI-CD)
+- **Infraestrutura:** Azure Container Registry (Docker images), Azure App Service
 
 ## 📋 Pré-requisitos
 Antes de começar, você precisará de uma conta no **Azure** com o serviço **Azure OpenAI** habilitado e um modelo implantado (deployment).
 
 ---
 
-## 📡 Endpoint Principal
+## 📡 Como Utilizar o Agente
 
-### `POST /generate-test`
+### Interface Online (Swagger)
+Acesse a documentação interativa e teste diretamente pelo navegador:
 
-Gera automaticamente testes unitários para o código enviado e executa os testes.
+[https://agente-qa-vinicius-ddhkfdf3f9f6fvh7.canadacentral-01.azurewebsites.net/docs](https://agente-qa-vinicius-ddhkfdf3f9f6fvh7.canadacentral-01.azurewebsites.net/docs)
+
+**Como testar:** Abra o link, clique no método `POST`, depois em `Try it out`, insira seu código JSON e clique em `Execute`.
+
+### Endpoint Principal: `POST /generate-test`
+
+**Exemplo de Requisição:**
+```json
+{
+  "source_code": "def somar(a: int, b: int): return a + b",
+  "language": "python"
+}
+```
+```json
+{
+  "status": "success",
+  "test_code": "import pytest...",
+  "pytest_output": "8 passed in 0.09s",
+  "return_code": 0
+}   
+```
+Note: return_code 0 (Sucesso), 1 (Falha no teste), 2 (Erro de sintaxe).
 
 ---
 
-## 💻 Como Executar a API
+### Execução Local
+Para rodar o projeto na sua máquina e realizar modificações:
 
-1. **Inicie o servidor:**
-    ```Bash
-    uvicorn app:app --reload
-    
-2. **Acesse a documentação automática.**
-    ```Bash
-    http://localhost:8000/docs
-    
-3. **Usar o endpoint**
-    ```Bash
-    POST /generate-tests
-    ```
-    
-### 📥 Exemplo de requisição
-    ```Bash
-    {
-    "source_code": "def somar(a, b):\n    return a + b\n\ndef dividir(a, b):\n    if b == 0:\n        raise ValueError('Não é possível dividir por zero.')\n    return a / b",
-    "language": "python"
-    }
-    ```
+1. Clone o repositório:
+```bash
+git clone https://github.com/vicent777/agente-langchain-pytest.git
+cd agente-langchain-pytest
+```
 
-### Exemplo de resposta
-    ```Bash
-    {
-    "status": "success",
-    "test_code": "import pytest ...",
-    "pytest_output": "... 3 passed in 0.02s",
-    "pytest_error": "",
-    "return_code": 0
-    }
-    ```
+2. Ambiente Virtual & Dependências:
+```bash
+python -m venv venv
+source venv/bin/activate  # No Windows: venv\Scripts\activate
+pip install -r requirements.txt
+```
 
-## 🔧 Configuração do Ambiente
+3. Variáveis de Ambiente:
+```bash
+Crie um arquivo .env na raiz:
 
-1. **Clone o repositório:**
-   ```bash
-   git clone https://github.com/vicent777/agente-langchain-pytest.git
-   cd agente-langchain-pytest
+AZURE_OPENAI_API_KEY="sua_chave"
+AZURE_OPENAI_ENDPOINT="https://seu-recurso.openai.azure.com"
+AZURE_OPENAI_DEPLOYMENT_NAME="nome-do-deployment"
+AZURE_OPENAI_API_VERSION="2023-05-15"
+```
 
-2. **Crie um ambiente virtual:**
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # No Windows: venv\Scripts\activate
-
-3. **Instale as dependências:**
-    ```bash
-    pip install -r requirements.txt
-
-4. **Configure as Variáveis de Ambiente:**
-    ```bash
-    Crie um arquivo .env na raiz do projeto:
-
-    AZURE_OPENAI_API_KEY="sua_chave_aqui"
-    AZURE_OPENAI_ENDPOINT="https://seu-recurso.openai.azure.com"
-    AZURE_OPENAI_DEPLOYMENT_NAME="nome-do-seu-deployment"
-    AZURE_OPENAI_API_VERSION="2023-05-15"
+4. Execução:
+```Bash
+uvicorn app:app --reload
+```
+Após iniciar, acesse localmente em: http://localhost:8000/docs
 
 
