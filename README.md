@@ -31,8 +31,7 @@ Este projeto implementa um **Agente de IA Autônomo** capaz de analisar códigos
 - **Deploy:** Azure App Service (integração com GitHub Actions / CI-CD)
 - **Infraestrutura:** Azure Container Registry (Docker images), Azure App Service
 
-## 📋 Pré-requisitos
-Antes de começar, você precisará de uma conta no **Azure** com o serviço **Azure OpenAI** habilitado e um modelo implantado (deployment).
+> Antes de começar, você precisará de uma conta no **Azure** com o serviço **Azure OpenAI** habilitado e um modelo implantado (deployment).
 
 ---
 
@@ -62,7 +61,7 @@ Acesse a documentação interativa e teste diretamente pelo navegador:
   "return_code": 0
 }   
 ```
-Note: return_code 0 (Sucesso), 1 (Falha no teste), 2 (Erro de sintaxe).
+> Note: return_code 0 (Sucesso), 1 (Falha no teste), 2 (Erro de sintaxe).
 
 ---
 
@@ -96,6 +95,6 @@ AZURE_OPENAI_API_VERSION="2023-05-15"
 ```Bash
 uvicorn app:app --reload
 ```
-Após iniciar, acesse localmente em: http://localhost:8000/docs
+> Após iniciar, acesse localmente em: http://localhost:8000/docs
 
 
