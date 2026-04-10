@@ -4,8 +4,7 @@ from typing import Optional
 import subprocess
 import tempfile
 import os
-import sys
-from main import gerar_testes
+from main import gerar_testes, explicar_resultado
 
 app = FastAPI(title="QA Agent API", description="Geração de testes unitários com LLM")
 
@@ -24,23 +23,23 @@ async def api_generate_test(request: CodeRequest):
         # 2. Cria pasta temporária isolada
         with tempfile.TemporaryDirectory() as tmpdir:
 
-            # 3. Arquivo de código (IMPORTANTE: nome fixo esperado pelo teste)
+            # 3. Código fonte
             codigo_path = os.path.join(tmpdir, "codigo_enviado.py")
 
             with open(codigo_path, "w", encoding="utf-8") as f:
                 f.write(request.source_code)
 
-            # 4. Arquivo de teste
+            # 4. Testes gerados
             test_file_path = os.path.join(tmpdir, "test_generated.py")
 
             with open(test_file_path, "w", encoding="utf-8") as f:
                 f.write(resultado)
 
-            # 5. GARANTE que pytest encontre o módulo
+            # 5. PYTHONPATH para pytest achar o módulo
             env = os.environ.copy()
             env["PYTHONPATH"] = tmpdir
 
-            # 6. Executa pytest no diretório correto
+            # 6. Executa pytest
             processo = subprocess.run(
                 ["pytest", test_file_path, "-q"],
                 cwd=tmpdir,
@@ -49,13 +48,20 @@ async def api_generate_test(request: CodeRequest):
                 env=env
             )
 
-        # 7. Retorno limpo
+        # 7. Gera resumo com LLM (FORA do with, mas ainda dentro do try)
+        resumo = explicar_resultado(
+            processo.stdout + "\n" + processo.stderr,
+            processo.returncode
+        )
+
+        # 8. Retorno
         return {
             "status": "success",
             "test_code": resultado,
             "pytest_output": processo.stdout,
             "pytest_error": processo.stderr,
-            "return_code": processo.returncode
+            "return_code": processo.returncode,
+            "summary": resumo
         }
 
     except Exception as e:
