@@ -44,6 +44,16 @@ Acesse a documentação interativa e teste diretamente pelo navegador:
 
 **Como testar:** Abra o link, clique no método `POST`, depois em `Try it out`, insira seu código JSON e clique em `Execute`.
 
+---
+
+### Cenários de teste e comportamento
+
+O Agente de QA adapta a geração dos testes de acordo com a robustez do seu código. Abaixo, mostramos a diferença entre usar apenas Type Hints e implementar uma validação explícita.
+
+**1. Usando apenas Type Hints**
+
+Neste cenário, o Python aceita os dados (devido à tipagem dinâmica), mas o Agente pode gerar testes rigorosos que falham ao tentar forçar erros de tipo.
+
 ### Endpoint Principal: `POST /generate-test`
 
 **Exemplo de Requisição:**
@@ -53,6 +63,7 @@ Acesse a documentação interativa e teste diretamente pelo navegador:
   "language": "python"
 }
 ```
+Saídas esperadas
 ```json
 {
   "status": "success",
@@ -61,7 +72,36 @@ Acesse a documentação interativa e teste diretamente pelo navegador:
   "return_code": 0
 }   
 ```
-> Note: return_code 0 (Sucesso), 1 (Falha no teste), 2 (Erro de sintaxe).
+ou
+```json
+{
+  "status": "success",
+  "pytest_output": "...FF  [100%]\nFAILED test_generated.py::test_somar_com_tipo_invalido - Failed: DID NOT RAISE <class 'TypeError'>",
+  "return_code": 1
+}
+```
+> Nota: O resultado pode variar. Se o Agente gerar apenas testes de lógica, ele retornará sucesso. Caso gere testes de estresse para validar tipos (edge cases), o teste falhará porque o Python, por natureza dinâmica, não lança o erro esperado.
+
+**2. Implementando Validação Explícita**
+
+**Exemplo de Requisição:**
+```json
+{
+  "source_code": "def somar(a, b):\n    if not isinstance(a, int) or not isinstance(b, int):\n        raise ValueError('Notas devem ser números inteiros!')\n    return a + b",
+  "language": "python"
+}
+```
+Saída esperada
+```json
+{
+  "status": "success",
+  "pytest_output": ".. [100%]\n2 passed in 0.03s",
+  "return_code": 0
+}
+```
+
+
+> Nota: return_code 0 (Sucesso), 1 (Falha no teste), 2 (Erro de sintaxe).
 
 ---
 
