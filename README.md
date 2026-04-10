@@ -49,7 +49,7 @@ Acesse a documentação interativa e teste diretamente pelo navegador:
 **Exemplo de Requisição:**
 ```json
 {
-  "source_code": "def somar(a: int, b: int): return a + b",
+  "source_code": "def somar(a: int, b: int) -> int:\n    return a + b",
   "language": "python"
 }
 ```
