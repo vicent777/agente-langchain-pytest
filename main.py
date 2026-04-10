@@ -86,7 +86,33 @@ Responda:
 
 
 # -----------------------------
-# CLI LOCAL
+# SUGERE CORREÇÃO
 # -----------------------------
+def sugerir_correcao(codigo: str, pytest_output: str, return_code: int) -> str:
+    llm = get_llm()
+
+    response = llm.invoke([
+        SystemMessage(content="Você é um engenheiro de software especialista em debugging."),
+        HumanMessage(content=f"""
+Analise o código e o erro dos testes.
+
+CÓDIGO:
+{codigo}
+
+OUTPUT DO PYTEST:
+{pytest_output}
+
+RETURN CODE:
+{return_code}
+
+TAREFA:
+- identifique o problema
+- explique o motivo do erro
+- sugira uma correção no código (mostre o código corrigido)
+""")
+    ])
+
+    return response.content
+
 if __name__ == "__main__":
     gerar_testes("funcao.py", eh_arquivo=True)

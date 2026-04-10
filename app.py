@@ -4,7 +4,7 @@ from typing import Optional
 import subprocess
 import tempfile
 import os
-from main import gerar_testes, explicar_resultado
+from main import gerar_testes, explicar_resultado, sugerir_correcao
 
 app = FastAPI(title="QA Agent API", description="Geração de testes unitários com LLM")
 
@@ -48,20 +48,31 @@ async def api_generate_test(request: CodeRequest):
                 env=env
             )
 
-        # 7. Gera resumo com LLM (FORA do with, mas ainda dentro do try)
+        # 7. Gera resumo com LLM do resultado do pytest
         resumo = explicar_resultado(
             processo.stdout + "\n" + processo.stderr,
             processo.returncode
         )
 
-        # 8. Retorno
+        # 8. Sugere correção
+
+        correcao = None
+        if processo.returncode != 0:
+            correcao = sugerir_correcao(
+                request.source_code,
+                processo.stdout + "\n" + processo.stderr,
+                processo.returncode
+            )
+
+        # 9. Retorno
         return {
             "status": "success",
             "test_code": resultado,
             "pytest_output": processo.stdout,
             "pytest_error": processo.stderr,
             "return_code": processo.returncode,
-            "summary": resumo
+            "summary": resumo,
+            "suggested_fix": correcao
         }
 
     except Exception as e:
