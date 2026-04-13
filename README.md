@@ -59,7 +59,7 @@ Neste cenário, o Python aceita os dados (devido à tipagem dinâmica), mas o Ag
 **Exemplo de Requisição:**
 ```json
 {
-  "source_code": "def somar(a: int, b: int) -> int:\n    return a + b",
+  "source_code": "def somar(a, b):    return a + b",
   "language": "python"
 }
 ```
