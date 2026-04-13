@@ -1,4 +1,5 @@
 import os
+import json
 from dotenv import load_dotenv
 from langchain_openai import AzureChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
@@ -94,7 +95,27 @@ def sugerir_correcao(codigo: str, pytest_output: str, return_code: int) -> str:
     response = llm.invoke([
         SystemMessage(content="Você é um engenheiro de software especialista em debugging."),
         HumanMessage(content=f"""
-Analise o código e o erro dos testes.
+    Analise o código e o erro dos testes.
+
+    Sua resposta deve seguir EXATAMENTE este formato JSON:
+
+    {{
+    "issue": "resumo curto do problema",
+    "cause": "explicação clara do erro",
+    "fix": "o que precisa ser feito para corrigir",
+    "corrected_code": "código corrigido completo"
+    }}
+
+    Regras:
+    - NÃO escreva nada fora do JSON
+    - NÃO use markdown
+    - NÃO adicione explicações extras
+
+    Tarefa:
+    - identificar o problema
+    - explicar a causa
+    - sugerir correção
+    - fornecer código corrigido
 
 CÓDIGO:
 {codigo}
@@ -105,14 +126,18 @@ OUTPUT DO PYTEST:
 RETURN CODE:
 {return_code}
 
-TAREFA:
-- identifique o problema
-- explique o motivo do erro
-- sugira uma correção no código (mostre o código corrigido)
 """)
     ])
 
-    return response.content
+    try:
+        return json.loads(response.content)
+    except Exception:
+        return {
+            "issue": "erro ao gerar resposta estruturada",
+            "cause": response.content,
+            "fix": "verificar prompt ou saída da LLM",
+            "corrected_code": ""
+        }
 
 if __name__ == "__main__":
     gerar_testes("funcao.py", eh_arquivo=True)
