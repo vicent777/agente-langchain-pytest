@@ -20,6 +20,19 @@ Este projeto implementa um **Agente de IA Autônomo** capaz de analisar códigos
 - **Arquitetura Containerizada:** Pronto para rodar via Docker em qualquer infraestrutura.
 - **Pipeline CI/CD:** Integração nativa com GitHub Actions para deploy automatizado na Azure.
 
+#### Resposta Estruturada com IA
+
+O agente não apenas executa testes, mas também interpreta os resultados e sugere correções de forma estruturada.
+
+A resposta inclui:
+
+- `issue`: resumo do problema identificado  
+- `cause`: explicação da falha  
+- `fix`: sugestão de correção  
+- `corrected_code`: código ajustado  
+
+> Isso permite que a saída seja utilizada tanto por desenvolvedores quanto por sistemas automatizados.
+
 ## 🛠️ Tecnologias Utilizadas
 - **Linguagem:** Python 3.10+
 - **API Framework:** FastAPI
@@ -50,9 +63,11 @@ Acesse a documentação interativa e teste diretamente pelo navegador:
 
 O Agente de QA adapta a geração dos testes de acordo com a robustez do seu código. Abaixo, mostramos a diferença entre usar apenas Type Hints e implementar uma validação explícita.
 
-**1. Usando apenas Type Hints**
+**1. Sem validação explícita**
 
-Neste cenário, o Python aceita os dados (devido à tipagem dinâmica), mas o Agente pode gerar testes rigorosos que falham ao tentar forçar erros de tipo.
+Neste cenário, a função não possui validação de tipos. Como o Python é dinamicamente tipado, ele pode aceitar diferentes tipos de entrada sem gerar erro imediato.
+
+O Agente pode gerar testes mais rigorosos (incluindo casos inválidos), que falham caso a função não trate esses cenários.
 
 ### Endpoint Principal: `POST /generate-test`
 
@@ -83,6 +98,10 @@ ou
 > Nota: O resultado pode variar. Se o Agente gerar apenas testes de lógica, ele retornará sucesso. Caso gere testes de estresse para validar tipos (edge cases), o teste falhará porque o Python, por natureza dinâmica, não lança o erro esperado.
 
 **2. Implementando Validação Explícita**
+
+Neste cenário, a função valida os tipos de entrada manualmente, garantindo que apenas valores esperados sejam processados.
+
+Isso permite que os testes gerados pelo agente sejam atendidos corretamente, inclusive em casos de erro.
 
 **Exemplo de Requisição:**
 ```json
